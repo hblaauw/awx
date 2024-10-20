@@ -1,5 +1,5 @@
 ---
-- hosts: athena,asteria
+- hosts: FEGGOL
   tasks:
   - name: hostname
     debug:
