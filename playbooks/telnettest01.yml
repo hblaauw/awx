@@ -1,0 +1,25 @@
+---
+- name: Telnet test naar poort 5432
+  hosts: localhost
+  gather_facts: yes
+ 
+  tasks:
+    - name: Telnet test
+      wait_for:
+        host: athena
+        port: 5432
+        state: started
+        timeout: 5
+      ignore_errors: true
+      register: telnet_result
+    - name: print iets 
+      debug:
+        msg: "{{ telnet_result | to_nice_json }}"
+      when: telnet_result.failed
+ 
+    - name: Schrijf niet-succesvolle testen naar een tekstbestand
+      copy:
+        content: "{{ telnet_result | to_nice_json }}"
+        dest: /home/ansusr/test/tmp/telnet_test_resultaten.txt
+      when: telnet_result.failed
+      delegate_to: localhost
