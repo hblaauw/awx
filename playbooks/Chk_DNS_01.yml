@@ -1,0 +1,43 @@
+---
+- hosts: localhost
+  remote_user: ansusr
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: true
+
+  vars:
+    dnsfile: /tmp/dnschecks_{{ ansible_date_time.date }}.txt
+   
+  tasks:
+  - name: Maak alvast een tekstfile aan met een leuke header
+    lineinfile:
+      dest: '{{ dnsfile }}'
+      create: true
+      line: "FQDN mail tests {{ ansible_date_time.date }}"
+  - name: Maak alvast een tekstfile aan met een leuke header
+    lineinfile:
+      dest: '{{ dnsfile }}'
+      insertafter:
+      line: "-> *+*+*+*+*+* <-" 
+
+
+
+  - name: Lees te controleren FQDNs in
+    include_vars:
+      file: FQDNs.yaml
+      name: checkall
+
+  - name: Voer checks uit
+    ansible.builtin.include_tasks: Chk_DNS_02c.yml
+    vars:
+      S_dnsfile: "{{ dnsfile }}"
+      S_cmd: "{{ item.cmd }}"
+      S_oms: "{{ item.oms }}"
+
+    loop: "{{ checkall.FQDN_lst }}"
+
+
+
+
+

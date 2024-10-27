@@ -1,0 +1,19 @@
+---
+- name: Check dns "{{ S_oms }}"  
+  shell: "{{ S_cmd }}"
+  register: dns_result
+
+- name: Print Regeltje 1
+  debug:
+    msg: "{{ S_oms }}"
+
+- name: Print regeltje 2
+  debug:
+    msg: "{{ dns_result.stdout_lines }} "
+
+      
+     
+    
+
+  
+
