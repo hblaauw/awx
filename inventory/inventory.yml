@@ -1,5 +1,4 @@
 --
 [FEGGOL]
 athena ansible_host=192.168.178.19
-asteria ansible_host=192.168.178.40
-tanit ansible_host=192.168.178.232
+demeter ansible_host=192.168.178.21
