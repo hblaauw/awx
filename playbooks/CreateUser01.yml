@@ -1,0 +1,20 @@
+---
+- name: creer een test user
+  hosts: demeter
+  remote_user: ansusr
+  become: true
+  become_user: root
+  become_method: sudo
+  tasks:
+  - user:
+     name: genrtp
+     shell: /bin/bash
+     home: /home/genrtp
+     groups: ['adm', 'ansusr']
+     generate_ssh_key: yes
+     ssh_key_bits: 2048
+     ssh_key_file: .ssh/id_rsa
+     append: yes
+     #     password: 
+
+
