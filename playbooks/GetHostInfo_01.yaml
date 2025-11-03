@@ -1,5 +1,5 @@
 ---
-- hosts: FEGGOL
+- hosts: "{{ naam }}" 
   tasks:
   - name: hostname
     debug:
