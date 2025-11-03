@@ -1,6 +1,6 @@
 ---
 - name: creer een test user
-  hosts: demeter
+  hosts: "{{ naam }}" 
   remote_user: ansusr
   become: true
   become_user: root
@@ -8,10 +8,10 @@
   roles:
     - name: users
       user:
-        - username: frauantje      
+        - username: "{{ gebruiker }}"      
           name: frauantje
           groups: ['adm','ansusr']
-          home: /home/frauantje
+          home: /home/{{ gebruiker}}
     
 
 
