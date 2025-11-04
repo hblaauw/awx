@@ -9,9 +9,9 @@
     - name: users
       user:
         - username: "{{ gebruiker }}"      
-          name: frauantje
-          groups: ['adm','ansusr']
-          home: /home/{{ gebruiker}}
+          name: testgebruiker 
+          groups: ['staff','users']
+          home: /home/{{ gebruiker }}
     
 
 
