@@ -15,7 +15,7 @@
     - name: print iets 
       debug:
         msg: "{{ telnet_result | to_nice_json }}"
-      when: telnet_result.failed
+      #when: telnet_result.failed
  
     #- name: Schrijf niet-succesvolle testen naar een tekstbestand
     #  copy:
