@@ -1,18 +1,17 @@
 ---
-- name: creer een test user
-  hosts: "{{ naam }}" 
+- hosts: "{{ naam }}" 
   remote_user: ansusr
   become: true
   become_user: root
   become_method: sudo
   tasks:
-  - name: Creer testuser
-    ansible.builtin.user:
-      name: "{{ gebruiker }}"
-      shell: /bin/bash
-      comment: testgebruiker 
-      groups: ['staff','users']
-      home: /home/{{ gebruiker }}
+    - name: Creer testuser
+      ansible.builtin.user:
+        name: "{{ gebruiker }}"
+        shell: /bin/bash
+        comment: testgebruiker 
+        groups: ['staff','users']
+        home: /home/{{ gebruiker }}
     
 
 
