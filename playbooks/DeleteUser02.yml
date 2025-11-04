@@ -1,0 +1,14 @@
+---
+- name: Verwijder een user
+  hosts: "{{ naam }}" 
+  remote_user: ansusr
+  become: true
+  become_user: root
+  become_method: sudo
+  tasks:
+  - user:
+     name: "{{ gebruiker }}"
+     state: absent
+     remove: yes    
+
+
