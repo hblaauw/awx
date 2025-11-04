@@ -6,7 +6,7 @@
   tasks:
     - name: Telnet test
       wait_for:
-        host: FEGGOL
+        host: "{{ dbserver }}"
         port: 5432
         state: started
         timeout: 5
