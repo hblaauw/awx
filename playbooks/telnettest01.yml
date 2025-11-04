@@ -1,6 +1,6 @@
 ---
 - name: Telnet test naar poort 5432
-  hosts: localhost
+  hosts: "{{ dbserver }}"
   gather_facts: yes
  
   tasks:
