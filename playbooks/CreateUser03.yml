@@ -6,12 +6,13 @@
   become_user: root
   become_method: sudo
   tasks:
-    ansible.builtin.user:
-    name: "{{ gebruiker }}"
-    shell: /bin/bash
-    comment: testgebruiker 
-    groups: ['staff','users']
-    home: /home/{{ gebruiker }}
+    - name: Creer testuser
+      ansible.builtin.user:
+        name: "{{ gebruiker }}"
+        shell: /bin/bash
+        comment: testgebruiker 
+        groups: ['staff','users']
+        home: /home/{{ gebruiker }}
     
 
 
