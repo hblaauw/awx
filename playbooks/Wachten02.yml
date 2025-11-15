@@ -1,0 +1,9 @@
+---
+- hosts: athena
+  remote_user: ansusr
+  tasks:
+    - name: wacht 360 seconden
+      ansible.builtin.pause:
+        minutes: 360 
+
+
