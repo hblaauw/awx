@@ -1,5 +1,5 @@
 ---
-- hosts: athena
+- hosts: "{{ naam }}"
   remote_user: ansusr
   tasks:
     - name: wacht 360 seconden
