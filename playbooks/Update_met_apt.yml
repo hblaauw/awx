@@ -1,0 +1,16 @@
+---
+- name: Update {{ servernaam }} met apt in domain feggol.lan
+  hosts: ' {{ servernaam }} '
+  remote_user: ansusr
+  become: true
+  become_user: root
+  become_method: sudo
+  tasks:
+    - name: upgrade eerst cache & repos
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Update alle pakketen
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
