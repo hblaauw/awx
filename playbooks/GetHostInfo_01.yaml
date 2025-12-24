@@ -11,3 +11,7 @@
       RAM Mem total mb: "{{ ansible_memtotal_mb }}"
     debug:
      msg: "{{ msg.split('\n') }}"
+  - name: wachten 5 minuten
+    ansible.buildin.pause:
+      minutes: 5
+     
