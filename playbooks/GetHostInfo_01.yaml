@@ -12,6 +12,6 @@
     debug:
      msg: "{{ msg.split('\n') }}"
   - name: wachten 5 minuten
-    ansible.buildin.pause:
+    ansible.builtin.pause:
       minutes: 5
      
