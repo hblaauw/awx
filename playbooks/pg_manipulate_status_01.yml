@@ -1,0 +1,68 @@
+---
+# PostgreSQL stoppen
+#ansible-playbook manage_postgres.yml \
+#  -e "target_server=dbserver01" \
+#  -e "pg_state=stopped"
+
+# PostgreSQL starten
+#ansible-playbook manage_postgres.yml \
+#  -e "target_server=dbserver01" \
+#  -e "pg_state=started"
+
+# PostgreSQL herstarten
+#ansible-playbook manage_postgres.yml \
+#  -e "target_server=dbserver01" \
+#  -e "pg_state=restarted"
+
+- name: Manage PostgreSQL service
+  hosts: "{{ target_server }}"
+  become: true
+
+  vars:
+    pg_state: "started"  # started | stopped | restarted | reloaded
+    pg_ins: "postgresql@15-main"
+
+  tasks:
+    - name: Get current PostgreSQL service status
+      ansible.builtin.systemd:
+        name: "{{ pg_ins }}" 
+      register: pg_current_status
+
+    - name: Show current status
+      ansible.builtin.debug:
+        msg: "PostgreSQL on {{ inventory_hostname }} is currently: {{ pg_current_status.status.ActiveState }}"
+
+    - name: "Skip if already in desired state"
+      ansible.builtin.debug:
+        msg: >
+          No action needed — PostgreSQL on {{ inventory_hostname }}
+          is already {{ pg_current_status.status.ActiveState }}
+          (requested: {{ pg_state }})
+      when: >
+        (pg_state == 'started' and pg_current_status.status.ActiveState == 'active') or
+        (pg_state == 'stopped' and pg_current_status.status.ActiveState == 'inactive')
+
+    - name: "Ensure PostgreSQL service is {{ pg_state }}"
+      ansible.builtin.service:
+        name: "{{ pg_ins }}" 
+        state: "{{ pg_state }}"
+      register: service_result
+      when: >
+        not (
+          (pg_state == 'started' and pg_current_status.status.ActiveState == 'active') or
+          (pg_state == 'stopped' and pg_current_status.status.ActiveState == 'inactive')
+        )
+
+    - name: Get new PostgreSQL service status
+      ansible.builtin.systemd:
+        name: "{{ pg_ins }}"
+      register: pg_new_status
+
+    - name: Summary
+      ansible.builtin.debug:
+        msg: >
+          Server:    {{ inventory_hostname }}
+          Was:       {{ pg_current_status.status.ActiveState }}
+          Requested: {{ pg_state }}
+          Is now:    {{ pg_new_status.status.ActiveState }}
+          Action:    {{ 'skipped (already in desired state)' if service_result is skipped else 'executed' }}
