@@ -1,0 +1,38 @@
+---
+- name: Overzicht apt updates laatste 7 dagen
+  hosts: "{{ naam }}"
+  remote_user: ansusr
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  tasks:
+    - name: Lees apt history logs van laatste 7 dagen  
+      shell: |
+        zgrep -h -E "Start-Date|Upgrade:" /var/log/apt/history.log* | \
+        awk -v d="{{ ansible_date_time.date }}" '
+          function date_minus_7(d,   cmd, r) {
+            cmd = "date -d \"" d " -7 days\" +%Y-%m-%d"
+            cmd | getline r
+            close(cmd)
+            return r
+          }
+          BEGIN { cutoff = date_minus_7(d) }
+          $1=="Start-Date:" {
+            current_date=$2
+            show=(current_date>=cutoff)
+            if (show) print "\n" current_date
+          }
+          show && $1=="Upgrade:" {
+            sub("Upgrade: ","")
+            print "  - " $0
+          }
+        '
+      register: apt_updates
+
+
+    - name: Toon apt updates
+      debug:
+        msg:  "{{ inventory_hostname }} {{ apt_updates.stdout_lines | join('\n')}}\n"
+        #msg:  " {{ apt_updates.stdout_lines | split('\n') }}"
